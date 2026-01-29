@@ -1,0 +1,18 @@
+[Unit]
+Description=reqtrace target %i
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/reqtrace/targets/%i.env
+ExecStart=/bin/sh -lc '/usr/local/bin/reqtrace "$URL" $ARGS | /usr/bin/tee -a "$OUT" >/dev/null'
+User=root
+Group=root
+UMask=0022
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=6
+
+[Install]
+WantedBy=multi-user.target
